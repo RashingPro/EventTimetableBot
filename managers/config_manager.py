@@ -4,7 +4,7 @@ import yaml
 class ConfigManager:
     @staticmethod
     def get_config(path: str):
-        with open(f'../config/{path}') as cfg_file:
+        with open(f'./config/{path}') as cfg_file:
             cfg = yaml.safe_load(cfg_file)
         return cfg
 
