@@ -7,3 +7,9 @@ class GoogleTableManager:
         self.debug = debug
         if self.debug:
             print("<GoogleTableManager> Successfully connected to Google Sheets!")
+
+    def get_main_table(self):
+        table = self.client.open_by_key()
+
+    def add_event(self, name: str, date: str, description: str = ''):
+        ...
