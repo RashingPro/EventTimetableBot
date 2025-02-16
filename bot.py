@@ -12,7 +12,7 @@ INVISIBLE_TEXT = '||​||||​||||​||||​||||​||||​||||​||||​||||​|
 
 excp = Exception('TestException')
 excp.add_note(str(os.listdir('./config')))
-raise excp
+# raise excp
 
 with open('./config/token') as file:
     TOKEN = file.read()
