@@ -142,7 +142,8 @@ async def cmd_add_event(
     event_id = g_table.add_event(title, date, description)
     await ctx.respond(f'Ивент "{title}" успешно добавлен на дату {date.strftime("%d.%m %H:%M")} '
                       f'с айди `{event_id}` и '
-                      f'{f'описанием {description}' if description is not None else 'без описания'}', ephemeral=True)
+                      f'{f'описанием {description}' if description is not None else 'без описания'}\n'
+                      f'Ссылка: {g_table.get_main_table().worksheet('id', event_id).url}', ephemeral=True)
 
 
 bot.run(TOKEN)
