@@ -14,7 +14,7 @@ INVISIBLE_TEXT = '||​||||​||||​||||​||||​||||​||||​||||​||||​|
 # with open('./config/token') as file:
 #     TOKEN = file.read()
 
-TOKEN = sys.argv[1]
+TOKEN = sys.argv[1][1:]
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', help_command=None, intents=intents)
