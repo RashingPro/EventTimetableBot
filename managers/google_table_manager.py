@@ -25,8 +25,7 @@ class GoogleTableManager:
         return table
 
     def add_event(self, name: str, date: datetime.datetime, description: str = '', table_key: str = None):
-        def _add_event(self, name, date, description, table_key):
-
+        def _add_event(self, name, date, description, table_key, res):
             if self.debug:
                 print(f'<GoogleTableManager> Adding event "{name}" at {date.strftime(f"%d.%m (%a) %H:%M")}...')
             if table_key is None:
@@ -66,10 +65,14 @@ class GoogleTableManager:
             sheet.cell('D1').set_horizontal_alignment(pygsheets.HorizontalAlignment.CENTER)
 
             if self.debug:
-                print(f'<GoogleTableManager> Successfully added event "{name}"')
+                print(f'<GoogleTableManager> Successfully added event "{name}" with id "{sheet.id}"')
+            res.append(sheet.id)
 
-        t1 = threading.Thread(target=_add_event, args=(self, name, date, description, table_key))
+        res = []
+        t1 = threading.Thread(target=_add_event, args=(self, name, date, description, table_key, res))
         t1.start()
+        t1.join()
+        return res[0]
 
     def remove_event(self, event_id: int, table_key: str = None):
         def _remove_event(self: GoogleTableManager, event_id, table_key):
@@ -142,3 +145,23 @@ class GoogleTableManager:
         t1 = threading.Thread(target=_book_user, args=(self, event_id, user_id, username, comment, table_key))
         t1.start()
 
+    def set_user_mc_nick(self, event_id: int, user_id: int, nick: str, table_key: str = None):
+        def _set_user_mc_nick(self: GoogleTableManager, event_id, user_id, nick, table_key):
+            if self.debug:
+                print(f'<GoogleTableManager> Setting user "{user_id}" mc nick to "{nick}" in event "{event_id}"...')
+            if table_key is None:
+                table = self.get_main_table()
+            else:
+                table = self.get_table(table_key)
+            sheet = table.worksheet('id', event_id)
+            i = 2
+            val = sheet.cell((i, 4)).value
+            while val.split('/')[1] != str(user_id):
+                i += 1
+                val = sheet.cell((i, 4)).value
+            sheet.update_value((i, 5), f'{nick}')
+            if self.debug:
+                print(f'<GoogleTableManager> Successfully set user "{user_id}" mc nick to "{nick}" in event "{event_id}"')
+
+        t1 = threading.Thread(target=_set_user_mc_nick, args=(self, event_id, user_id, nick, table_key))
+        t1.start()
